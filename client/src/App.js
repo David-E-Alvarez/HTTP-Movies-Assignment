@@ -12,7 +12,10 @@ const App = () => {
   const getMovieList = () => {
     axios
       .get("http://localhost:5000/api/movies")
-      .then(res => setMovieList(res.data))
+      .then(res => {
+        setMovieList(res.data)
+        console.log("res.data in App.js", res.data)
+      })
       .catch(err => console.log(err.response));
   };
 
@@ -32,9 +35,10 @@ const App = () => {
         <MovieList movies={movieList} />
       </Route>
 
-      <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList}/>
-      </Route>
+      <Route path="/movies/:id"
+        render={props => 
+          <Movie {...props } movieList={movieList} setMovieList={setMovieList} addToSavedList={addToSavedList}/>}
+        />
 
       <Route path="/update-movie/:id">
         <UpdateMovie movieList={movieList} setMovieList={setMovieList}/>

@@ -3,20 +3,22 @@ import axios from 'axios';
 import { useRouteMatch } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-function Movie({ addToSavedList }) {
-  console.log("addToSavedList in Movie.js", addToSavedList);
+function Movie(props) {
+  console.log("props in Movie.js", props);
   const [movie, setMovie] = useState(null);
   const match = useRouteMatch();
 
   const fetchMovie = id => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => setMovie(res.data))
+      .then(res => {
+        setMovie(res.data)
+      })        
       .catch(err => console.log(err.response));
   };
 
   const saveMovie = () => {
-    addToSavedList(movie);
+    props.addToSavedList(movie);
   };
 
   useEffect(() => {
@@ -27,6 +29,13 @@ function Movie({ addToSavedList }) {
     return <div>Loading movie information...</div>;
   }
 
+  
+
+  const routeToUpdateMovie = e => {
+    e.preventDefault();
+    console.log("routeToUpdateMovie");
+    props.history.push(`/update-movie/${movie.id}`)
+  }
 
   
   console.log("movie in Movie.js", movie);
@@ -37,6 +46,7 @@ function Movie({ addToSavedList }) {
       <div className='save-button' onClick={saveMovie}>
         Save
       </div>
+      <button onClick={routeToUpdateMovie}>Update Movie</button>
 
 
     </div>
