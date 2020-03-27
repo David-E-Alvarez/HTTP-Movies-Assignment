@@ -6,7 +6,6 @@ const initialItem = {
     title: "",
     director: "",
     metascore: "",
-    description: "",
     stars: []
   };
 
@@ -16,12 +15,12 @@ const UpdateMovie = (props) => {
     const { push } = useHistory();
     const[movie, setMovie] = useState(initialItem);
 
-    const handleChange = ev => {
-        ev.persist()
-        let value = ev.target.value;
+    const handleChange = e => {
+        e.persist()
+        let value = e.target.value;
         setMovie({
             ...movie,
-            [ev.target.name]: value
+            [e.target.name]: value
         });
     };
 
@@ -37,23 +36,16 @@ const UpdateMovie = (props) => {
         axios
             .put(`http://localhost:5000/api/movies/${id}`, movie)
             .then(res => {
-                props.setMovie(res.data);
+                console.log("!!!!!!", res.data)
+                setMovie(res.data);
                 push(`/movies/${id}`);
             })
             .catch(err => console.log(err));
-        setMovie({
-            title: "",
-            director: "",
-            metascore: "",
-            description: "",
-            stars: []
-        })
     }
 
 
     return(
         <div>
-            <h1>UpdateMovie.js</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -76,13 +68,6 @@ const UpdateMovie = (props) => {
                     onChange={handleChange}
                     value={movie.metascore}
                 />
-                 <input
-                    type="text"
-                    name="description"
-                    placeholder="description"
-                    onChange={handleChange}
-                    value={movie.description}
-                />
                 <input
                     type="text"
                     name="stars"
@@ -90,6 +75,7 @@ const UpdateMovie = (props) => {
                     onChange={handleChange}
                     value={movie.stars}
                 />
+                <button type="submit">Update</button>
             </form>
         </div>
     );
