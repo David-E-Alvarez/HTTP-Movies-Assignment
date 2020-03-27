@@ -37,8 +37,9 @@ const UpdateMovie = (props) => {
             .put(`http://localhost:5000/api/movies/${id}`, movie)
             .then(res => {
                 console.log("!!!!!!", res.data)
-                setMovie(res.data);
-                push(`/movies/${id}`);
+                props.getMovieList();
+                setMovie(initialItem);
+                push(`/`);
             })
             .catch(err => console.log(err));
     }
